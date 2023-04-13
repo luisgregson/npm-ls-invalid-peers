@@ -17,7 +17,7 @@ function lsInvalidPeers() {
     if (code !== 0) {
       console.warn('npm ls --all exited with code', code);
     }
-    const result = processOutput(data);
+    processOutput(data);
   });
 }
 
