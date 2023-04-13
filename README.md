@@ -34,11 +34,11 @@ After running the `npm-ls-invalid-peers` command in a project, you may see outpu
 
 ```
 react@17.0.2
-  -  node_modules/@blueprintjs/datetime requires: "^15.3.0 || 16" 
-  -  node_modules/@blueprintjs/select requires: ^15.3.0 || 16"
+  -  @blueprintjs/datetime requires: "^15.3.0 || 16" 
+  -  @blueprintjs/select requires: ^15.3.0 || 16"
   -  ...
 react-dom@17.0.2
-  - node_modules/@blueprintjs/datetime: "^15.3.0 || 16" 
+  - @blueprintjs/datetime: "^15.3.0 || 16" 
   - ...
 ```
 This output shows the packages with invalid peer dependencies, grouped by the packages on which they depend.

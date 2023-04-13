@@ -1,5 +1,5 @@
 const INVALID_PEER_DEPENDENCY_RE = /[─\─]\s([^\s]+)/g
-const PACKAGE_AND_VERSION_RE = /(".+?")\sfrom\s(node_modules\/[^\s,]+)/g
+const PACKAGE_AND_VERSION_RE = /(".+?")\sfrom\snode_modules\/([^\s,]+)/g
 function processOutput(data) {
   const lines = data.split('\n');
   const invalidLines = lines.filter(line => line.includes('invalid:'));
