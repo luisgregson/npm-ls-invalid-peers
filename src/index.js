@@ -1,48 +1,23 @@
-const { exec } = require('child_process');
+const { spawn } = require('child_process');
+const processOutput = require('./processOutput');
 
 function lsInvalidPeers() {
-  exec('npm ls --all', (err, data) => {
-    if (err) {
-      console.error('Error running npm ls --all:', err);
-      return;
+  const cmd = spawn('npm', ['ls', '--all']);
+
+  let data = '';
+  cmd.stdout.on('data', (chunk) => {
+    data += chunk.toString();
+  });
+
+  cmd.stderr.on('data', (chunk) => {
+    console.error(chunk.toString());
+  });
+
+  cmd.on('exit', (code) => {
+    if (code !== 0) {
+      console.warn('npm ls --all exited with code', code);
     }
-
-
-    const lines = data.split('\n');
-    const dedupedLines = lines.filter(line => line.includes('deduped invalid') || line.includes('deduped'));
-
-    const dependencies = {};
-
-    for (const line of dedupedLines) {
-      const match = line.match(/(react(?:-dom)?@\d+\.\d+\.\d+)/);
-
-      if (!match) {
-        continue;
-      }
-
-      const dependency = match[1];
-
-      if (!dependencies[dependency]) {
-        dependencies[dependency] = [];
-      }
-
-      const packageMatch = line.match(/node_modules\/([^/]+)/);
-      const requiredVersionMatch = line.match(/invalid: "([^"]+)"/);
-
-      if (packageMatch && requiredVersionMatch) {
-        const packageName = packageMatch[1];
-        const requiredVersion = requiredVersionMatch[1];
-        dependencies[dependency].push(`${packageName}: "${requiredVersion}"`);
-      }
-    }
-
-    for (const [dependency, packages] of Object.entries(dependencies)) {
-      console.log(`${dependency}`);
-      for (const packageInfo of packages) {
-        console.log(`  - ${packageInfo}`);
-      }
-      console.log('');
-    }
+    const result = processOutput(data);
   });
 }
 
